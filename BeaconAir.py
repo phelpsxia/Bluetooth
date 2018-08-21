@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-# BeaconAir - Reads iBeacons and controls HUE lights
-# JCS  6/7/14
-#
-#
+# BeaconAir - Reads iBeacons
+# Based onJCS  6/7/14
+# modified by Phelps 08/20/2018
+
 import sys
 import time
 import utils
@@ -11,18 +11,9 @@ import utils
 sys.path.append('./ble')
 sys.path.append('./config')
 
-# if conflocal.py is not found, import default conf.py
-
 # Check for user imports
 import config as conf
-
-
-
-
-
 import bleThread
-
-#import lights
 import webmap
 import bubblelog
 import iBeaconChart
@@ -35,80 +26,17 @@ from Queue import Queue
 currentiBeaconRSSI=[]
 rollingiBeaconRSSI=[]
 currentiBeaconTimeStamp=[]
+addr = "/home/phelps/BeaconAir/state/"
 
-# Light State Variables
-
-#currentLightState= []
-
-#LIGHT_BRIGHTNESS_SENSITIVITY = 2.0
-#LIGHT_DISTANCE_SENSITIVITY = 2.0
 BEACON_ON = True
-DISPLAY_BEACON_ON = True
-#DISPLAY_LIGHTS_ON = True
-
 # init state variables
 for beacon in conf.BeaconList:
 	currentiBeaconRSSI.append(0)
 	rollingiBeaconRSSI.append(0)
 	currentiBeaconTimeStamp.append(time.time())
 
-
-# recieve commands from RasPiConnect Execution Code
-
-def completeCommand():
-
-        f = open("/home/phelps/BeaconAir/state/BeaconAirCommand.txt", "w")
-        f.write("DONE")
-        f.close()
-
-def processCommand():
-	global LIGHT_BRIGHTNESS_SENSITIVITY
-	global LIGHT_DISTANCE_SENSITIVITY
-	global BEACON_ON
-	global DISPLAY_BEACON_ON
-	global DISPLAY_LIGHTS_ON
-	global currentLightState
-
-        f = open("/home/phelps/BeaconAir/state/BeaconAirCommand.txt", "r")
-        command = f.read()
-        f.close()
-
-        if (command == "") or (command == "DONE"):
-                # Nothing to do
-                return False
-
-        # Check for our commands
-
-        print "Processing Command: ", command
-
-        if (command == "BEACONON"):
-                BEACON_ON = True
-                completeCommand()
-                return True
-
-        if (command == "BEACONOFF"):
-                BEACON_ON = False
-                completeCommand()
-                return True
-
-        if (command == "DISPLAYBEACONON"):
-                DISPLAY_BEACON_ON = True
-                completeCommand()
-                return True
-
-        if (command == "DISPLAYBEACONOFF"):
-                DISPLAY_BEACON_ON = False
-                completeCommand()
-                return True
-
-# build configuration Table
-
-
 # set up BLE thread
 # set up a communication queue
-
-
-
 queueBLE = Queue()
 BLEThread = Thread(target=bleThread.bleDetect, args=(__name__,10,queueBLE,))
 BLEThread.daemon = True
@@ -154,7 +82,7 @@ while True:
 				lastPosition = myPosition 
 				print "jitter=", jitter
 			
-				f = open("/home/pi/BeaconAir/state/distancejitter.txt", "w")
+				f = open(addr+"distancejitter.txt", "w")
 					
 				f.write(str(jitter))
 				f.close()

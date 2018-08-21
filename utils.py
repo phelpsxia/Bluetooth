@@ -1,6 +1,6 @@
 # utils for BeaconAir
-# jcs 6/8/2014
-
+# based onjcs 6/8/2014
+# modifide for navigation application 08/20/2018
 
 from threading import Thread
 import sys
@@ -11,13 +11,7 @@ import subprocess
 
 sys.path.append('./config')
 
-# if conflocal.py is not found, import default conf.py
-
-# Check for user imports
-
 import config as conf 
-
-
 
 # beacon processing routines
 
@@ -57,7 +51,7 @@ def processiBeaconList(incomingBeaconList, RSSIArray, TimeStampArray, rollingRSS
 	# parse the incoming beacon list
 
 	for beaconEntry in incomingBeaconList:
-		print "Beacon=", beaconEntry
+		#print "Beacon=", beaconEntry
 		beacon = beaconEntry.split(",")
 		UDID = beacon[1]
 		Major = beacon[2]
@@ -70,7 +64,7 @@ def processiBeaconList(incomingBeaconList, RSSIArray, TimeStampArray, rollingRSS
 
 		beaconnumber = checkForMatch(UDID, Major, Minor)
 		if (beaconnumber > -1):  # beacon found
-	 		print "beaconnumberFound = ", beaconnumber	
+	 		#print "beaconnumberFound = ", beaconnumber	
 
 			if (int(RSSIArray[beaconnumber]) > -1):  # reset rolling average
 				rollingRSSIArray[beaconnumber] = float(beacon[5])
@@ -90,14 +84,14 @@ def XcalculateDistanceWithRSSI(rssi,beaconnumber):
         return -1.0; # if we cannot determine accuracy, return -1.
     
 
-    beacon = conf.BeaconList[beaconnumber];  
+    beacon = conf.BeaconList[beaconnumber] 
     txPower = beacon[7] 
-    ratio = float(rssi)*1.0/float(txPower);
+    ratio = float(rssi)*1.0/float(txPower)
     if (ratio < 1.0) :
-        return pow(ratio,10);
+        return pow(ratio,10)
     else:
         accuracy =  (0.89976) * pow(ratio,7.7095) + 0.111;
-        return accuracy;
+        return accuracy
 
 
 def calculateDistanceWithRSSI(rssi,beaconnumber): 
@@ -153,9 +147,9 @@ def getXYFrom3Beacons(beaconnumbera, beaconnumberb, beaconnumberc, rollingRSSIAr
 
 def AlternativeGetXYFrom3Beacons(beaconnumbera, beaconnumberb, beaconnumberc, rollingRSSIArray):
 
-	beacona = conf.BeaconList[beaconnumbera];
-	beaconb = conf.BeaconList[beaconnumberb];
-	beaconc = conf.BeaconList[beaconnumberc];
+	beacona = conf.BeaconList[beaconnumbera]
+	beaconb = conf.BeaconList[beaconnumberb]
+	beaconc = conf.BeaconList[beaconnumberc]
 	ax = float(beacona[2])
 	ay = float(beacona[3])
 	bx = float(beaconb[2])
@@ -167,9 +161,9 @@ def AlternativeGetXYFrom3Beacons(beaconnumbera, beaconnumberb, beaconnumberc, ro
 	dB = float(calculateDistanceWithRSSI(rollingRSSIArray[beaconnumberb], beaconnumberb ))
 	dC = float(calculateDistanceWithRSSI(rollingRSSIArray[beaconnumberc], beaconnumberc ))
 
-	x = ( ( (pow(dA,2)-pow(dB,2)) + (pow(cx,2)-pow(ax,2)) + (pow(by,2)-pow(ay,2)) ) * (2*cy-2*by) - ( (pow(dB,2)-pow(dC,2)) + (pow(cx,2)-pow(cx,2)) + (pow(cy,2)-pow(by,2)) ) *(2*by-2*ay) ) / ( (2*bx-2*cx)*(2*by-2*ay)-(2*ax-2*bx)*(2*cy-2*by) );
+	x = ( ( (pow(dA,2)-pow(dB,2)) + (pow(cx,2)-pow(ax,2)) + (pow(by,2)-pow(ay,2)) ) * (2*cy-2*by) - ( (pow(dB,2)-pow(dC,2)) + (pow(cx,2)-pow(cx,2)) + (pow(cy,2)-pow(by,2)) ) *(2*by-2*ay) ) / ( (2*bx-2*cx)*(2*by-2*ay)-(2*ax-2*bx)*(2*cy-2*by) )
 
-	y = ( (pow(dA,2)-pow(dB,2)) + (pow(cx,2)-pow(ax,2)) + (pow(by,2)-pow(ay,2)) + x*(2*ax-2*bx)) / (2*by-2*ay);
+	y = ( (pow(dA,2)-pow(dB,2)) + (pow(cx,2)-pow(ax,2)) + (pow(by,2)-pow(ay,2)) + x*(2*ax-2*bx)) / (2*by-2*ay)
 
 
 	point = [x, y] 
@@ -226,7 +220,7 @@ def printBeaconStatus(beacon, RSSIArray, TimeStampArray, rollingRSSIArray):
 def printBeaconDistance(beacon, RSSIArray, TimeStampArray,rollingRSSIArray):
 
 	print "BN: ", beacon[0],"x,y: ", beacon[2], beacon[3],"RSSI:", RSSIArray[beacon[0]], "rollingRSSI: %3.2f" % rollingRSSIArray[beacon[0]] , "Distance: %3.2f" % calculateDistanceWithRSSI(rollingRSSIArray[beacon[0]], beacon[0])	
-	print "BN: ", beacon[0],"x,y: ", beacon[2], beacon[3],"RSSI:", RSSIArray[beacon[0]], "rollingRSSI: %3.2f" % rollingRSSIArray[beacon[0]] , "Distance: %3.2f" % XcalculateDistanceWithRSSI(rollingRSSIArray[beacon[0]], beacon[0])
+	#print "BN: ", beacon[0],"x,y: ", beacon[2], beacon[3],"RSSI:", RSSIArray[beacon[0]], "rollingRSSI: %3.2f" % rollingRSSIArray[beacon[0]] , "Distance: %3.2f" % XcalculateDistanceWithRSSI(rollingRSSIArray[beacon[0]], beacon[0])
 		
 
 

@@ -1,17 +1,9 @@
 # webmap.py
 # builds the webmap code from state and configuration files
 # jcs 6/9/2014
-#
+
 import utils
-# if conflocal.py is not found, import default conf.py
-
-
-# Check for user imports
-try:
-        import conflocal as conf
-except ImportError:
-        import conf
-
+import config
 
 def buildWebMapToFile(myPosition, rollingRSSIArray, currentLightStateArray, displaybeacon, displaylights):
 

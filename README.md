@@ -1,10 +1,8 @@
 #
-# BeaconAir Source code
-#
-# SwitchDoc Labs  
+# the indoor locationlization algorithm using ibeacon for project robodog
+# based on BeaconAir Source code from SwitchDoc Labs  
 # www.switchdoc.com
-# 7/8/2014
-# (c) 2014 under GPL2 license
 #
+# 08/20/2018
 #
 

@@ -9,24 +9,17 @@
 
 import sys
 import time
-
 import utils
-
-
-sys.path.append('/home/pi/BeaconAir/config')
-
 
 #global variables
 
-datalist = [];
+datalist = []
 # if conflocal.py is not found, import default conf.py
 
 # Check for user imports
-try:
-	import conflocal as conf
-except ImportError:
-	import conf
+import config
 
+addr = "/home/phelps/BeaconAir/state/"
 
 def buildGraphString():
 
@@ -34,7 +27,7 @@ def buildGraphString():
 
 	response = ""
 	valuecount = ""
-        f = open("/home/pi/BeaconAir/state/iBeaconCountGraph.txt", "w")
+        f = open(addr + "iBeaconCountGraph.txt", "w")
 	for i in range(len(datalist)):
 	 	response += str(datalist[i])
 		valuecount += str(i)
@@ -68,7 +61,7 @@ def iBeacondetect(RSSIArray):
 	datalist.append(count)	
 
 	buildGraphString()
-	f = open("/home/pi/BeaconAir/state/beaconCount.txt", "w") 
+	f = open(addr + "beaconCount.txt", "w") 
 	f.write(str(count))
 	f.close() 
 
